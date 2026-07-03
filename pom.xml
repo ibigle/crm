@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.cx</groupId>
+    <artifactId>crm</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>cx-common</module>
+        <module>cx-starter</module>
+        <module>admin-service</module>
+        <module>api-gateway</module>
+        <module>user-service</module>
+        <module>order-service</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+    </properties>
+
+    <!-- 版本管理：只做版本宣告和锁定，子模块需要时才引入，避免依赖污染 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>2.0.52</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>3.0.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>3.5.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>3.5.7</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.cx</groupId>
+                <artifactId>cx-common</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <!-- Spring Cloud 依赖控制 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Cloud Alibaba 依赖控制 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>2.9.2</version> <!-- 请根据实际情况选择最新稳定版 -->
+            </dependency>
+            <!-- MyBatis-Plus 核心基础设施 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>3.5.5</version> <!-- 建议锁死稳定版本 -->
+            </dependency>
+            <!-- JSqlParser 依赖（MyBatis-Plus 多租户的核心解析器，防 SQL 注入） -->
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>4.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alicp.jetcache</groupId>
+                <artifactId>jetcache-starter-redis-lettuce</artifactId>
+                <version>2.7.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alicp.jetcache</groupId>
+                <artifactId>jetcache-anno</artifactId>
+                <version>2.7.5</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- 基础工具包 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.46</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.27</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>0.12.5</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>0.12.5</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>0.12.5</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- 专门解决高并发线程池、CompletableFuture、并行流下的多租户数据穿透与串账漏洞 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>2.14.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>kryo</artifactId>
+                <version>5.6.0</version> <!-- 与 JetCache 2.7.x 兼容 -->
+            </dependency>
+            <!-- 7. 解决 JDK21 环境下 Netty SSL 异常的国密/加密扩展包 -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>3.1.8</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--    &lt;!&ndash; 公共依赖：所有子模块无条件继承的包（必须足够纯净） &ndash;&gt;-->
+    <!--    <dependencies>-->
+    <!--        &lt;!&ndash; 开启 bootstrap.yml 读取支持 &ndash;&gt;-->
+    <!--        <dependency>-->
+    <!--            <groupId>org.springframework.cloud</groupId>-->
+    <!--            <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
+    <!--        </dependency>-->
+    <!--        <dependency>-->
+    <!--            <groupId>com.alicp.jetcache</groupId>-->
+    <!--            <artifactId>jetcache-starter-redis-lettuce</artifactId>-->
+    <!--            <version>2.7.3</version>-->
+    <!--        </dependency>-->
+    <!--        &lt;!&ndash; 基础工具包 &ndash;&gt;-->
+    <!--        <dependency>-->
+    <!--            <groupId>org.projectlombok</groupId>-->
+    <!--            <artifactId>lombok</artifactId>-->
+    <!--            <version>1.18.46</version>-->
+    <!--        </dependency>-->
+    <!--        <dependency>-->
+    <!--            <groupId>cn.hutool</groupId>-->
+    <!--            <artifactId>hutool-all</artifactId>-->
+    <!--            <version>5.8.27</version>-->
+    <!--        </dependency>-->
+    <!--        <dependency>-->
+    <!--            <groupId>io.jsonwebtoken</groupId>-->
+    <!--            <artifactId>jjwt-api</artifactId>-->
+    <!--            <version>0.12.5</version>-->
+    <!--        </dependency>-->
+    <!--        <dependency>-->
+    <!--            <groupId>io.jsonwebtoken</groupId>-->
+    <!--            <artifactId>jjwt-impl</artifactId>-->
+    <!--            <version>0.12.5</version>-->
+    <!--            <scope>runtime</scope>-->
+    <!--        </dependency>-->
+    <!--        <dependency>-->
+    <!--            <groupId>io.jsonwebtoken</groupId>-->
+    <!--            <artifactId>jjwt-jackson</artifactId>-->
+    <!--            <version>0.12.5</version>-->
+    <!--            <scope>runtime</scope>-->
+    <!--        </dependency>-->
+    <!--        &lt;!&ndash; Jackson 用于序列化（JetCache 依赖） &ndash;&gt;-->
+    <!--        <dependency>-->
+    <!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+    <!--            <artifactId>jackson-databind</artifactId>-->
+    <!--            <version>2.21.4</version>-->
+    <!--        </dependency>-->
+    <!--        &lt;!&ndash; 专门解决高并发线程池、CompletableFuture、并行流下的多租户数据穿透与串账漏洞 &ndash;&gt;-->
+    <!--        <dependency>-->
+    <!--            <groupId>com.alibaba</groupId>-->
+    <!--            <artifactId>transmittable-thread-local</artifactId>-->
+    <!--            <version>2.14.5</version>-->
+    <!--        </dependency>-->
+    <!--    </dependencies>-->
+</project>

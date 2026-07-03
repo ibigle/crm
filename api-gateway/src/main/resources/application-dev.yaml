@@ -1,0 +1,98 @@
+server:
+  port: 9191
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p11
+    key-store-password: 123456xyXY
+    key-alias: tomcat
+
+management:
+  tracing:
+    sampling:
+      probability: 0.01 # 生产环境建议采样率 0.01~0.1
+    propagation:
+      type: w3c # 推荐使用 W3C Trace Context 标准，兼容性更好
+  endpoints:
+    web:
+      exposure:
+        include: gateway, health, info, metrics, loggers # 可选：暴露 metrics 用于监控，loggers 用于动态调整日志级别
+        exclude: env, beans, mappings # 生产环境隐藏敏感信息端点
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      enabled: true
+      show-details: when_authorized # 仅授权用户可见详细信息
+    info:
+      enabled: true
+      git:
+        mode: full # 暴露 Git 提交信息，便于回溯部署版本
+
+spring:
+  config:
+    # 配置文件
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true # 开发环境：信任所有证书
+      discovery:
+        locator:
+          enabled: true # 开启基于服务发现的路由
+          lower-case-service-id: true # 将服务名转为小写（可选）
+          default-filters:
+            - StripPrefix=1
+    sentinel:
+      transport:
+        # Sentinel 控制台的访问地址
+        dashboard: 127.0.0.1:9999
+        # 与控制台通信的本地端口（网关会自动在这个端口启动一个轻量级 HTTP 服务供控制台拉取数据）
+        port: 8719
+      # 核心配置：强行指定为响应式网关流控模式，防止装配错乱
+      filter:
+        order: -2147483648
+      scg:
+        fallback:
+          mode: response
+          response-status: 429
+          # 返回的数据格式
+          content-type: application/json
+          # 核心：直接在这里写下你要返回给前端的 JSON 字符串
+          response-body: '{"code":429,"msg":"网关触发限流或熔断，请稍后再试！","success":false}'
+
+loadbalancer:
+  stats:
+    window-size-ms: 7200000  # 2小时窗口
+  weights:
+    success: 0.6  # 成功率权重
+    load: 0.4      # 负载率权重
+  min-sample-size: 10  # 最小样本数
+
+# Nacos 统一配置
+#crm:
+#  gateway:
+#    # 内网通信安全密钥（不同环境配置不同的复杂随机字符串）
+#    internal-secret: ${random.uuid} # 或者手动指定复杂的密钥字符串
+
+
+jetcache:
+  statIntervalMinutes: 15 # 开启统计，便于监控命中率
+  areaInCacheName: false  # 新项目推荐 false，避免 Key 冗余
+  local:
+    default:
+      type: caffeine      # 本地缓存首选 Caffeine
+      limit: 1000         # 根据内存调整，防止 OOM
+      keyConvertor: fastjson2
+      expireAfterWriteInMillis: 600000 # 本地短过期 (如 10 分钟)
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      valueEncoder: kryo  # 关键：高效序列化
+      valueDecoder: kryo
+      poolConfig:
+        minIdle: 5
+        maxTotal: 50
+      uri: redis://localhost:6379

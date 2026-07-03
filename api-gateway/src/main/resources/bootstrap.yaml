@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: api-gateway  # 应用名称
+  cloud:
+    nacos:
+      # 1. 注册中心配置
+      discovery:
+        server-addr: 127.0.0.1:8848 # Nacos 服务器地址
+        namespace: a5ad4237-fe12-4243-a8c9-4e0202c900f1 # 命名空间（选填，默认 public）
+        group: DEFAULT_GROUP # 分组（选填，默认 DEFAULT_GROUP）
+
+      # 2. 配置中心配置
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: a5ad4237-fe12-4243-a8c9-4e0202c900f1
+        group: DEFAULT_GROUP
+        file-extension: yaml
+
+logging:
+  file:
+    path: C:\BIGLE-FILES\logs\${spring.application.name}

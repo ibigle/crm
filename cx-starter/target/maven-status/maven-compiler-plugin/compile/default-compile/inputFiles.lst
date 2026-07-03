@@ -1,0 +1,12 @@
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\config\PermissionAutoConfiguration.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\config\FeignHttp2Config.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\client\AdminFeignClient.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\context\TenantContext.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\filter\TenantFilter.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\service\AuthorizationService.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\client\fallback\AdminFeignClientFallback.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\annotation\Permission.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\aspect\PermissionAspect.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\config\JetCacheConfig.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\service\PermissionMetaCollector.java
+C:\BIGLE-FILES\project\backend\crm\cx-starter\src\main\java\com\cx\security\interceptor\DimensionInterceptor.java

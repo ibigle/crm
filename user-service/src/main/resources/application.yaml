@@ -1,0 +1,17 @@
+server:
+  port: 9090
+
+spring:
+  profiles:
+    active: dev
+  config:
+    # 配置文件
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+gateway:
+  force:
+    enabled: true  # 生产环境开启，开发环境可关闭
+
+logging:
+  file:
+    path: C:\BIGLE-FILES\logs\${spring.application.name}

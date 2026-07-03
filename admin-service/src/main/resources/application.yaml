@@ -1,0 +1,79 @@
+server:
+  port: 1001
+
+spring:
+  application:
+    name: admin-service
+  profiles:
+    active: dev #目前环境
+
+  config:
+    # 配置文件
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+  cloud:
+    nacos:
+      # 1. 注册中心配置
+      discovery:
+        server-addr: 127.0.0.1:8848 # Nacos 服务器地址
+        namespace: a5ad4237-fe12-4243-a8c9-4e0202c900f1 # 命名空间（选填，默认 public）
+        group: DEFAULT_GROUP # 分组（选填，默认 DEFAULT_GROUP）
+
+      # 2. 配置中心配置
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: a5ad4237-fe12-4243-a8c9-4e0202c900f1
+        group: DEFAULT_GROUP
+        file-extension: yaml
+
+  # MySQL 与 HikariCP 连接池高性能整合
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/ibigle_meta?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    # 🔒 数据库登录密码密文托管，冷启动时进程将自动反洗还原明文
+    password: 926101xyXY  #"ENC(RcJP2kDmj0R9bBf1iYw1zd1cJG6LowQqP0Yzd/mAHpAsCpj2ZOJ9tfLiE/4fQjr+)"
+    hikari:
+      pool-name: CRM_UAC_HIKARI_POOL
+      minimum-idle: 10
+      maximum-pool-size: 32
+      idle-timeout: 30000
+
+# 🌟 JetCache 高性能两级缓存框架配置（对齐网关通信边界）
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: true
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson2
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      valueEncoder: kryo # 🚀 锁死对齐 Kryo 高能级序列化，体积缩减 70%，UDP 传输 100% 不丢包
+      valueDecoder: kryo
+      uri: redis://127.0.0.1:6379/0
+
+# MyBatis-Plus 全局控制字配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+logging:
+  file:
+    path: C:\BIGLE-FILES\logs\${spring.application.name}
+
+# Jasypt 商密解密引擎算法深度对齐
+#jasypt:
+#  encryptor:
+#    password: CRM_BIGLE_ROOT_SALT_KEY_2026
+#    algorithm: PBEWithMD5AndDES
+#    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+#    string-output-type: base64                    # 输出编码（base64/hexadecimal）
+#    property:
+#      prefix: "ENC("
+#      suffix: ")"

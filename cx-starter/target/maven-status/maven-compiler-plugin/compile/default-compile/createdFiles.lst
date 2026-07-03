@@ -1,0 +1,13 @@
+com\cx\security\service\AuthorizationService.class
+com\cx\security\config\JetCacheConfig.class
+com\cx\security\context\TenantContext.class
+com\cx\security\client\fallback\AdminFeignClientFallback$1.class
+com\cx\security\config\FeignHttp2Config.class
+com\cx\security\annotation\Permission.class
+com\cx\security\service\PermissionMetaCollector.class
+com\cx\security\filter\TenantFilter.class
+com\cx\security\config\PermissionAutoConfiguration.class
+com\cx\security\aspect\PermissionAspect.class
+com\cx\security\client\AdminFeignClient.class
+com\cx\security\client\fallback\AdminFeignClientFallback.class
+com\cx\security\interceptor\DimensionInterceptor.class

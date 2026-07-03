@@ -1,0 +1,11 @@
+server:
+  port: 8089
+
+spring:
+  config:
+    # 配置文件
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+gateway:
+  force:
+    enabled: true  # 生产环境开启，开发环境可关闭
